@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#7134D0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dialektica" />
+  <title>Dialektica</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- Splash Screen -->
+    <div id="screen-splash" class="screen active">
+      <img class="logo-img splash-logo" src="logo.png" alt="Dialektica" draggable="false" />
+    </div>
+
+    <!-- Login Screen -->
+    <div id="screen-login" class="screen">
+      <div class="auth-container">
+        <div class="brand-header">
+          <img class="logo-img logo-full" src="logo.png" alt="Dialektica" draggable="false" />
+        </div>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <input type="text" class="field" placeholder="Usuario" autocomplete="username" />
+          <input type="password" class="field" placeholder="Contraseña" autocomplete="current-password" />
+          <button type="submit" class="btn-primary">INICIAR SESIÓN</button>
+        </form>
+
+        <a href="#" class="link-secondary" id="forgot-password">¿Olvidaste tu contraseña?</a>
+
+        <div class="social-divider">
+          <button class="btn-social" aria-label="Continuar con Facebook">
+            <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95C18.05 21.45 22 17.19 22 12z"/></svg>
+          </button>
+          <button class="btn-social" aria-label="Continuar con Google">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="white"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="white"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="white"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="white"/></svg>
+          </button>
+        </div>
+
+        <p class="link-register">¿No tienes cuenta? <a href="#" id="go-register">Regístrate</a></p>
+      </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="screen-register" class="screen">
+      <div class="auth-container register-container">
+        <div class="brand-header">
+          <img class="logo-img logo-full" src="logo.png" alt="Dialektica" draggable="false" />
+        </div>
+
+        <h2 class="section-title">CREAR CUENTA</h2>
+
+        <form class="auth-form" id="register-form" novalidate>
+          <input type="text" class="field" placeholder="Nombre" autocomplete="given-name" />
+          <input type="text" class="field" placeholder="Apellido" autocomplete="family-name" />
+          <input type="text" class="field" placeholder="Correo" autocomplete="email" />
+          <input type="date" class="field field-date" />
+          <input type="password" class="field" placeholder="Contraseña" autocomplete="new-password" />
+          <input type="password" class="field" placeholder="Confirmar contraseña" autocomplete="new-password" />
+          <button type="submit" class="btn-primary">REGISTRARSE</button>
+        </form>
+
+        <p class="link-register">¿Ya tienes cuenta? <a href="#" id="go-login">Inicia sesión</a></p>
+      </div>
+    </div>
+
+    <!-- Profile Screen (editar perfil) -->
+    <div id="screen-profile" class="screen screen-profile">
+      <div class="profile-hero">
+        <div class="profile-header" aria-hidden="true"></div>
+        <div class="profile-avatar-block">
+          <div id="profile-avatar-img" class="profile-avatar-img"></div>
+          <button type="button" id="btn-crear-personaje" class="btn-crear">crear personaje</button>
+        </div>
+      </div>
+
+      <div class="profile-body">
+        <form class="profile-form" id="profile-form" novalidate>
+          <input type="text" class="field-light" placeholder="nombre" autocomplete="given-name" />
+          <input type="text" class="field-light" placeholder="nombre de usuario" autocomplete="username" />
+          <input type="text" class="field-light" placeholder="sexo" />
+          <div class="test-toggle-row" id="test-toggle-row">
+            <div class="test-dot" id="test-dot" aria-hidden="true"></div>
+            <span class="test-toggle-label">realizar test</span>
+          </div>
+          <button type="submit" class="btn-finalizar">Finalizar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Avatar Creator Screen -->
+    <div id="screen-avatar" class="screen screen-creator">
+      <div class="creator-header">
+        <button id="btn-creator-back" class="creator-back">‹</button>
+        <div id="creator-preview" class="creator-preview"></div>
+        <div class="creator-tabs">
+          <button class="creator-tab active" data-tab="piel" type="button">Piel</button>
+          <button class="creator-tab" data-tab="cabello" type="button">Cabello</button>
+          <button class="creator-tab" data-tab="rostro" type="button">Rostro</button>
+          <button class="creator-tab" data-tab="color" type="button">Color ropa</button>
+        </div>
+      </div>
+
+      <div class="creator-scroll">
+        <div id="creator-content"></div>
+      </div>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="screen-test" class="screen screen-light">
+      <div class="test-wrap">
+        <div class="test-progress-bar">
+          <div class="test-progress-fill" id="test-progress-fill"></div>
+        </div>
+
+        <div class="test-body">
+          <h2 class="test-question" id="test-question"></h2>
+          <div class="test-options" id="test-options"></div>
+        </div>
+
+        <div class="test-footer">
+          <button class="btn-test-next" id="btn-next" disabled>SIGUIENTE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ APP: HOME ══ -->
+    <div id="screen-home" class="screen screen-home">
+      <header class="home-header">
+        <div class="home-pills">
+          <div class="home-pill">
+            <span class="home-pill-icon home-pill-icon-bolt" aria-hidden="true">⚡</span>
+            <span class="home-pill-value" id="home-streak">101</span>
+          </div>
+          <div class="home-pill">
+            <span class="home-pill-icon home-pill-icon-list" aria-hidden="true"></span>
+            <span class="home-pill-value" id="home-posts">3</span>
+          </div>
+        </div>
+        <div class="home-toolbar">
+          <button type="button" class="home-tool-btn" aria-label="Notificaciones">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button type="button" class="home-tool-btn" aria-label="Buscar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div id="hub-avatar" class="home-avatar"></div>
+      </header>
+
+      <div class="home-body">
+        <div class="home-grid">
+          <button type="button" class="home-card home-card-tareas" data-hub="tareas">
+            <span class="home-card-bg" aria-hidden="true">✓</span>
+            <span class="home-card-label">Tareas del dia</span>
+          </button>
+          <button type="button" class="home-card home-card-foro" data-hub="foro">
+            <span class="home-card-bg" aria-hidden="true">👥</span>
+            <span class="home-card-label">Foro</span>
+          </button>
+          <button type="button" class="home-card home-card-articulos" data-hub="articulos">
+            <span class="home-card-bg" aria-hidden="true">📖</span>
+            <span class="home-card-label">Articulos</span>
+          </button>
+          <button type="button" class="home-card home-card-libreta" data-hub="libreta">
+            <span class="home-card-bg" aria-hidden="true">📓</span>
+            <span class="home-card-label">Libreta de sentimientos</span>
+          </button>
+          <button type="button" class="home-card home-card-sim" data-hub="simulador">
+            <span class="home-card-bg" aria-hidden="true">💬</span>
+            <span class="home-card-label">Simula una conversación</span>
+          </button>
+          <button type="button" class="home-card home-card-seg" data-hub="seguimiento">
+            <span class="home-card-bg" aria-hidden="true">◎</span>
+            <span class="home-card-label">Seguimiento</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREAS -->
+    <div id="screen-tareas" class="screen screen-tareas">
+      <header class="tareas-header">
+        <div class="tareas-level" id="tareas-level">Nivel 1</div>
+        <button type="button" class="tareas-mic" aria-label="Entrada por voz">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/>
+            <path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+      <div class="tareas-body" id="tasks-list"></div>
+    </div>
+
+    <!-- LIBRETA DE SENTIMIENTOS -->
+    <div id="screen-libreta" class="screen screen-libreta">
+      <header class="libreta-header">
+        <div class="libreta-search-wrap">
+          <span class="libreta-search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <input type="search" id="libreta-search" class="libreta-search-input" placeholder="Buscar" autocomplete="off" />
+        </div>
+        <button type="button" class="libreta-mic" aria-label="Buscar por voz">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/>
+            <path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+      <div class="libreta-list-wrap">
+        <div class="notebook-list" id="notebook-list"></div>
+      </div>
+      <button type="button" class="libreta-fab" id="libreta-fab" aria-label="Nueva nota">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="note-modal" class="note-modal" aria-hidden="true">
+      <div class="note-modal-sheet">
+        <h2 class="note-modal-title">Nueva nota</h2>
+        <input type="text" id="note-title-input" class="field-light" placeholder="Titulo" maxlength="80" />
+        <textarea id="note-body-input" class="note-modal-body" placeholder="¿Qué sientes hoy?" rows="5"></textarea>
+        <div class="note-modal-actions">
+          <button type="button" class="btn-note-cancel" id="note-cancel">Cancelar</button>
+          <button type="button" class="btn-note-save" id="note-save">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-libreta-detail" class="screen screen-libreta-detail">
+      <header class="libreta-detail-header">
+        <button type="button" class="btn-back" data-back="libreta">‹</button>
+        <h1 id="libreta-detail-title">Titulo</h1>
+      </header>
+      <div class="libreta-detail-body">
+        <textarea id="libreta-detail-body" class="libreta-editor" placeholder="Escribe tus sentimientos…"></textarea>
+      </div>
+    </div>
+
+    <!-- FORO -->
+    <div id="screen-foro" class="screen screen-app">
+      <header class="app-bar"><button class="btn-back" data-back="home">‹</button><div class="search-bar"><input type="search" placeholder="Buscar en el foro…" /></div></header>
+      <div class="app-scroll" id="forum-feed"></div>
+      <button class="fab" type="button" aria-label="Nueva publicación">✎</button>
+    </div>
+
+    <!-- ARTÍCULOS -->
+    <div id="screen-articulos" class="screen screen-app">
+      <header class="app-bar"><button class="btn-back" data-back="home">‹</button><div class="search-bar"><input type="search" placeholder="Buscar artículos…" /><span>🎤</span></div></header>
+      <div class="section-scroll"><div class="h-carousel" id="articles-list"></div></div>
+    </div>
+
+    <div id="screen-articulo" class="screen screen-app">
+      <header class="app-bar app-bar-gradient"><button class="btn-back btn-back-light" data-back="articulos">‹</button><span class="app-bar-icon">🔊</span></header>
+      <div class="app-scroll app-pad article-view">
+        <h1 id="article-title"></h1>
+        <div id="article-body" class="article-text"></div>
+        <a id="article-link" class="article-ext-link" href="#" target="_blank" rel="noopener">SEGUIR LEYENDO ARTÍCULO</a>
+        <span id="article-stars" class="card-stars"></span>
+      </div>
+    </div>
+
+    <!-- SIMULADOR -->
+    <div id="screen-simulador" class="screen screen-app">
+      <header class="app-bar"><button class="btn-back" data-back="home">‹</button></header>
+      <div class="sim-pick">
+        <p class="sim-prompt">¿Con quien te gustaría hablar hoy?</p>
+        <button class="sim-character" id="pick-andrew" type="button">
+          <div id="sim-pick-avatar" class="sim-pick-avatar"></div>
+          <span>Andrew</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="screen-chat-sim" class="screen screen-app screen-chat-view">
+      <header class="app-bar chat-sim-bar"><button class="btn-back" data-back="simulador">‹</button></header>
+      <div class="chat-hero" id="sim-avatar-lg"></div>
+      <div class="chat-area"><div class="chat-messages" id="sim-messages"></div></div>
+      <div class="chat-input-wrap" id="sim-input">
+        <input type="text" id="sim-input-field" placeholder="Escribe un mensaje…" />
+        <button type="button" id="sim-mic" class="chat-mic">🎤</button>
+        <button type="button" id="sim-send" class="chat-send">➤</button>
+      </div>
+    </div>
+
+    <!-- SEGUIMIENTO -->
+    <div id="screen-seguimiento" class="screen screen-app">
+      <header class="app-bar"><button class="btn-back" data-back="home">‹</button><h1>Seguimiento</h1></header>
+      <div class="app-scroll app-pad">
+        <p class="seg-date">JUNIO 01 2025</p>
+        <section class="level-block"><h2>NIVEL EMOCIONAL</h2><div class="level-bar"><span style="width:72%"></span></div><div class="level-bar level-bar-light"><span style="width:45%"></span></div></section>
+        <section class="level-block"><h2>NIVEL SOCIAL</h2><div class="level-bar level-bar-blue"><span style="width:58%"></span></div></section>
+        <section class="level-block"><h2>NIVEL COMUNICATIVO</h2><div class="level-bar level-bar-teal"><span style="width:80%"></span></div><div class="level-bar level-bar-teal level-bar-light"><span style="width:35%"></span></div></section>
+        <button class="btn-primary btn-inline" id="go-seg-test" type="button">Realizar test de seguimiento</button>
+      </div>
+    </div>
+
+    <div id="screen-seg-test" class="screen screen-light">
+      <div class="test-wrap">
+        <div class="test-progress-bar"><div class="test-progress-fill" id="seg-progress-fill"></div></div>
+        <div class="test-body">
+          <h2 class="test-question" id="seg-question"></h2>
+          <div class="seg-scale" id="seg-scale">
+            <button class="scale-dot" data-v="1">1</button>
+            <button class="scale-dot" data-v="2">2</button>
+            <button class="scale-dot" data-v="3">3</button>
+            <button class="scale-dot" data-v="4">4</button>
+            <button class="scale-dot" data-v="5">5</button>
+          </div>
+          <textarea class="seg-textarea" id="seg-textarea" placeholder="Escribe tu respuesta…"></textarea>
+        </div>
+        <div class="test-footer"><button class="btn-test-next" id="btn-seg-next" type="button">SIGUIENTE</button></div>
+      </div>
+    </div>
+
+    <!-- CHATS / AMIGOS -->
+    <div id="screen-chats" class="screen screen-app">
+      <header class="app-bar app-header-hero app-header-compact">
+        <div class="search-bar search-bar-light"><input type="search" placeholder="Buscar chats…" /><span>🎤</span></div>
+      </header>
+      <p class="section-link"><a href="#" id="go-amigos">Ver lista de amigos →</a></p>
+      <div class="app-scroll" id="chats-list"></div>
+    </div>
+
+    <div id="screen-amigos" class="screen screen-app">
+      <header class="app-bar"><button class="btn-back" data-back="chats">‹</button><div class="search-bar"><input type="search" placeholder="Buscar amigos…" /><span>🎤</span></div></header>
+      <div class="app-scroll" id="friends-list"></div>
+    </div>
+
+    <div id="screen-chat" class="screen screen-app screen-chat-view">
+      <header class="app-bar chat-top-bar"><button class="btn-back" data-back="chats">‹</button><div id="chat-header-avatar" class="chat-header-avatar"></div><span id="chat-title"></span></header>
+      <div class="chat-area"><div class="chat-messages" id="chat-messages"></div></div>
+      <div class="chat-input-wrap">
+        <input type="text" placeholder="Escribe un mensaje…" />
+        <button type="button" class="chat-mic">🎤</button>
+      </div>
+    </div>
+
+    <!-- PERFIL DASHBOARD -->
+    <div id="screen-perfil-dash" class="screen screen-app">
+      <header class="app-bar app-header-hero app-header-compact dash-header">
+        <span>🔔</span><span>🔍</span>
+      </header>
+      <div class="dash-hero"><div id="dash-avatar" class="dash-avatar"></div></div>
+      <div class="app-scroll dash-body">
+        <h2 id="dash-username">@usuario</h2>
+        <p class="dash-friends">30 Amigos</p>
+        <button class="btn-crear" type="button" id="go-edit-profile">Editar perfil</button>
+        <div class="dash-stats"><div class="stat-card">⚡ 101</div><div class="stat-card">📄 3</div></div>
+        <input class="field-light dash-thought" type="text" placeholder="¿Qué estás pensando?" />
+        <section class="level-block"><h2>NIVEL EMOCIONAL</h2><div class="level-bar"><span style="width:65%"></span></div></section>
+        <section class="level-block"><h2>NIVEL SOCIAL</h2><div class="level-bar level-bar-blue"><span style="width:50%"></span></div></section>
+        <section class="level-block"><h2>NIVEL COMUNICATIVO</h2><div class="level-bar level-bar-teal"><span style="width:70%"></span></div></section>
+        <article class="forum-post dash-post"><div class="forum-post-head"><strong>@Wanda_j</strong><span>😊</span></div><p>Acaso las personas no entienden cuando no quiero hablar con…</p></article>
+      </div>
+    </div>
+
+    <!-- AJUSTES -->
+    <div id="screen-ajustes" class="screen screen-app">
+      <header class="app-bar"><div class="search-bar"><input type="search" placeholder="Buscar en ajustes…" /><span>🎤</span></div></header>
+      <div class="app-scroll settings-list">
+        <h3 class="settings-group">CUENTA</h3>
+        <button class="settings-row" type="button">Administrar cuenta</button>
+        <button class="settings-row" type="button">Restricción de perfil</button>
+        <h3 class="settings-group">PREFERENCIAS</h3>
+        <button class="settings-row" type="button">Idiomas</button>
+        <button class="settings-row" type="button">Sonido</button>
+        <button class="settings-row" type="button">Notificaciones</button>
+        <h3 class="settings-group">INICIO DE SESIÓN</h3>
+        <button class="settings-row" type="button">Agregar cuenta</button>
+        <button class="settings-row settings-danger" type="button" id="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <!-- Bottom navigation -->
+    <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Navegación principal">
+      <button class="nav-item" data-tab="ajustes" type="button" aria-label="Ajustes">
+        <img src="assets/icons/nav/settings.svg" alt="" width="28" height="28" />
+      </button>
+      <button class="nav-item" data-tab="chats" type="button" aria-label="Mensajes">
+        <img src="assets/icons/nav/chat.svg" alt="" width="28" height="28" />
+      </button>
+      <button class="nav-item active" data-tab="home" type="button" aria-label="Inicio">
+        <img src="assets/icons/nav/home.svg" alt="" width="28" height="28" />
+      </button>
+      <button class="nav-item" data-tab="perfil-dash" type="button" aria-label="Perfil">
+        <img src="assets/icons/nav/user.svg" alt="" width="28" height="28" />
+      </button>
+    </nav>
+
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
