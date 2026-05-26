@@ -33,6 +33,7 @@ export const ARTICLES = [
     title: '¿Cómo mejorar tus habilidades de comunicación?',
     subtitle: 'Utel Universidad con propósito.',
     stars: 100,
+    gradient: 'linear-gradient(128deg, #9b59d6 0%, #ef6c00 100%)',
     sections: [
       { heading: 'Escuchar es la clave', body: 'La escucha activa demuestra interés genuino. Parafrasea lo que escuchas y evita interrumpir.' },
       { heading: 'Haz preguntas', body: 'Las preguntas abiertas invitan a una conversación más rica y muestran curiosidad.' },
@@ -42,8 +43,24 @@ export const ARTICLES = [
     ],
     link: 'https://utel.edu.mx',
   },
-  { id: 'mejora-1', title: 'Mejora tus habilidades', subtitle: 'dir. lorem.', stars: 100, sections: [{ heading: 'Introducción', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }], link: '#' },
-  { id: 'mejora-2', title: 'Mejora tus habilidades', subtitle: 'dir. lorem.', stars: 100, sections: [{ heading: 'Introducción', body: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' }], link: '#' },
+  {
+    id: 'mejora-1',
+    title: 'Mejora tus habilidades',
+    subtitle: 'dir. lorem.',
+    stars: 100,
+    gradient: 'linear-gradient(128deg, #7134D0 0%, #d456a8 100%)',
+    sections: [{ heading: 'Introducción', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }],
+    link: '#',
+  },
+  {
+    id: 'mejora-2',
+    title: 'Mejora tus habilidades',
+    subtitle: 'dir. lorem.',
+    stars: 100,
+    gradient: 'linear-gradient(128deg, #4B7BE5 0%, #7134D0 55%, #E8821E 100%)',
+    sections: [{ heading: 'Introducción', body: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' }],
+    link: '#',
+  },
 ];
 
 export const NOTEBOOK_SEED = [

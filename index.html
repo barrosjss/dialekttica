@@ -264,9 +264,23 @@
     </div>
 
     <!-- ARTÍCULOS -->
-    <div id="screen-articulos" class="screen screen-app">
-      <header class="app-bar"><button class="btn-back" data-back="home">‹</button><div class="search-bar"><input type="search" placeholder="Buscar artículos…" /><span>🎤</span></div></header>
-      <div class="section-scroll"><div class="h-carousel" id="articles-list"></div></div>
+    <div id="screen-articulos" class="screen screen-app screen-articulos">
+      <header class="app-bar articulos-bar">
+        <button type="button" class="btn-back" data-back="home" aria-label="Volver">‹</button>
+        <div class="search-bar">
+          <input type="search" placeholder="Buscar artículos…" aria-label="Buscar artículos" />
+          <span class="search-mic" aria-hidden="true">🎤</span>
+        </div>
+      </header>
+      <div class="articulos-body">
+        <section class="articulos-featured" aria-label="Artículos destacados">
+          <div class="h-carousel articulos-carousel" id="articles-carousel"></div>
+        </section>
+        <section class="articulos-all" aria-label="Todos los artículos">
+          <h2 class="articulos-section-title">Todos los artículos</h2>
+          <div class="articulos-list" id="articles-list"></div>
+        </section>
+      </div>
     </div>
 
     <div id="screen-articulo" class="screen screen-app">
@@ -291,14 +305,23 @@
       </div>
     </div>
 
-    <div id="screen-chat-sim" class="screen screen-app screen-chat-view">
-      <header class="app-bar chat-sim-bar"><button class="btn-back" data-back="simulador">‹</button></header>
-      <div class="chat-hero" id="sim-avatar-lg"></div>
-      <div class="chat-area"><div class="chat-messages" id="sim-messages"></div></div>
-      <div class="chat-input-wrap" id="sim-input">
-        <input type="text" id="sim-input-field" placeholder="Escribe un mensaje…" />
-        <button type="button" id="sim-mic" class="chat-mic">🎤</button>
-        <button type="button" id="sim-send" class="chat-send">➤</button>
+    <div id="screen-chat-sim" class="screen screen-chat-sim">
+      <header class="chat-sim-header">
+        <button type="button" class="btn-back btn-back-sim" data-back="simulador" aria-label="Volver">‹</button>
+        <div class="chat-sim-avatar-ring" id="sim-avatar-lg" aria-hidden="true"></div>
+      </header>
+      <div class="chat-sim-body">
+        <div class="chat-messages chat-sim-messages" id="sim-messages"></div>
+      </div>
+      <div class="chat-input-wrap chat-sim-input" id="sim-input">
+        <input type="text" id="sim-input-field" placeholder="Escribe un mensaje…" autocomplete="off" />
+        <button type="button" id="sim-mic" class="chat-mic chat-sim-mic" aria-label="Mensaje por voz">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/>
+            <path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button type="button" id="sim-send" class="chat-send chat-sim-send" aria-label="Enviar">➤</button>
       </div>
     </div>
 

@@ -9,16 +9,46 @@ import {
 } from './data.js';
 import { initNotebook, renderNotebookList } from './notebook.js';
 import { avatarState } from './profile.js';
+import { isTaskCompleted, toggleTaskCompleted } from './tasks.js';
 
 const TAB_SCREENS = ['ajustes', 'chats', 'home', 'perfil-dash'];
-const NAV_SCREENS = [...TAB_SCREENS, 'chat-sim', 'tareas', 'articulos', 'libreta', 'foro'];
-const STACK_SCREENS = new Set([
-  'articulo', 'chat', 'chat-sim', 'simulador', 'amigos',
-  'seguimiento', 'seg-test', 'libreta-detail',
-]);
+
+const TAB_ROOT = {
+  ajustes: 'ajustes',
+  chats: 'chats',
+  home: 'home',
+  'perfil-dash': 'perfil-dash',
+};
+
+/** Pantalla actual → pestaña de la barra inferior */
+const SCREEN_TAB = {
+  home: 'home',
+  tareas: 'home',
+  articulos: 'home',
+  foro: 'home',
+  libreta: 'home',
+  articulo: 'home',
+  'libreta-detail': 'home',
+  simulador: 'home',
+  'chat-sim': 'home',
+  seguimiento: 'home',
+  'seg-test': 'home',
+  chats: 'chats',
+  chat: 'chats',
+  amigos: 'chats',
+  ajustes: 'ajustes',
+  'perfil-dash': 'perfil-dash',
+};
+
+const NAV_SCREENS = [
+  ...TAB_SCREENS,
+  'tareas', 'articulos', 'libreta', 'foro',
+  'articulo', 'libreta-detail', 'chat', 'amigos',
+];
 
 let showScreenFn = null;
 let activeTab = 'home';
+let currentScreen = 'splash';
 let currentChatId = null;
 let segIndex = 0;
 const segAnswers = [];
@@ -40,14 +70,23 @@ export function enterApp(tab = 'home') {
   showScreenFn(tab, 'right');
 }
 
+function screenTab(screenId) {
+  return SCREEN_TAB[screenId] ?? null;
+}
+
 function bindNav() {
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      if (!tab || tab === activeTab) return;
+      const root = tab ? TAB_ROOT[tab] : null;
+      if (!tab || !root) return;
+
+      if (currentScreen === root && activeTab === tab) return;
+
+      const sameBranch = screenTab(currentScreen) === tab;
       activeTab = tab;
       syncBottomNav();
-      showScreenFn(tab, 'right');
+      showScreenFn(root, sameBranch && currentScreen !== root ? 'left' : 'right');
     });
   });
 }
@@ -67,25 +106,16 @@ function syncBottomNav() {
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === activeTab);
   });
-  const nav = document.getElementById('bottom-nav');
-  if (nav) nav.classList.toggle('hidden', !TAB_SCREENS.includes(activeTab));
 }
 
 export function onScreenChange(screenId) {
+  currentScreen = screenId;
   const nav = document.getElementById('bottom-nav');
   if (!nav) return;
-  const showNav = NAV_SCREENS.includes(screenId);
-  nav.classList.toggle('hidden', !showNav);
-  if (screenId === 'chat-sim') {
-    document.querySelectorAll('.nav-item').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === 'chats');
-    });
-  } else if (['tareas', 'articulos', 'libreta', 'foro'].includes(screenId)) {
-    document.querySelectorAll('.nav-item').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === 'home');
-    });
-  } else if (TAB_SCREENS.includes(screenId)) {
-    activeTab = screenId;
+  nav.classList.toggle('hidden', !NAV_SCREENS.includes(screenId));
+  const tab = screenTab(screenId);
+  if (tab) {
+    activeTab = tab;
     syncBottomNav();
   }
 }
@@ -143,16 +173,42 @@ function renderChats() {
   bindListClicks(el, openChat);
 }
 
-function renderArticles() {
-  const el = document.getElementById('articles-list');
-  if (!el) return;
-  el.innerHTML = ARTICLES.map(a => `
-    <button class="carousel-card card-gradient card-carousel" data-go="articulo" data-id="${a.id}">
+function articleGradient(a) {
+  return a.gradient || 'linear-gradient(135deg, #7134D0 0%, #E8821E 100%)';
+}
+
+function articleCarouselCard(a) {
+  return `
+    <button type="button" class="carousel-card card-gradient card-carousel articulos-card" data-id="${a.id}" style="--article-gradient: ${articleGradient(a)}">
       <h3>${a.title}</h3>
       <p>${a.subtitle}</p>
       <span class="card-stars">★ ${a.stars}</span>
-    </button>`).join('');
-  bindCardClicks(el, openArticle);
+    </button>`;
+}
+
+function articleListItem(a) {
+  return `
+    <button type="button" class="article-list-item" data-id="${a.id}">
+      <div class="article-list-thumb" style="background: ${articleGradient(a)}"></div>
+      <div class="article-list-meta">
+        <h3>${a.title}</h3>
+        <p>${a.subtitle}</p>
+        <span class="article-list-stars">★ ${a.stars}</span>
+      </div>
+    </button>`;
+}
+
+function renderArticles() {
+  const carousel = document.getElementById('articles-carousel');
+  const list = document.getElementById('articles-list');
+  if (carousel) {
+    carousel.innerHTML = ARTICLES.map(articleCarouselCard).join('');
+    bindCardClicks(carousel, openArticle);
+  }
+  if (list) {
+    list.innerHTML = ARTICLES.map(articleListItem).join('');
+    bindCardClicks(list, openArticle);
+  }
 }
 
 function renderForum() {
@@ -180,15 +236,20 @@ function formatTaskDate(date) {
 }
 
 function taskCardHtml(task) {
+  const done = isTaskCompleted(task.id);
   return `
-    <article class="task-card">
+    <article class="task-card${done ? ' task-card--done' : ''}" data-task-id="${task.id}">
       <div class="task-card-visual">
         <p class="task-card-title">${task.title}</p>
       </div>
       <div class="task-card-footer">
         <span class="task-card-date">${formatTaskDate(task.date)}</span>
         <div class="task-card-actions">
-          <button type="button" class="task-btn task-btn-dot" aria-label="Estado de tarea"></button>
+          <button type="button" class="task-btn task-btn-check${done ? ' is-done' : ''}" data-task-id="${task.id}" role="checkbox" aria-checked="${done}" aria-label="${done ? 'Reto completado' : 'Marcar reto como completado'}">
+            <svg class="task-check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12l5 5L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
           <button type="button" class="task-btn task-btn-speaker" aria-label="Escuchar tarea">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
@@ -200,8 +261,21 @@ function taskCardHtml(task) {
     </article>`;
 }
 
-function bindTaskRowButtons(container) {
-  container.querySelectorAll('.task-btn').forEach(btn => {
+function bindTaskActions(container) {
+  container.querySelectorAll('.task-btn-check').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.taskId;
+      if (!id) return;
+      const done = toggleTaskCompleted(id);
+      btn.classList.toggle('is-done', done);
+      btn.setAttribute('aria-checked', String(done));
+      btn.setAttribute('aria-label', done ? 'Reto completado' : 'Marcar reto como completado');
+      const card = btn.closest('.task-card');
+      if (card) card.classList.toggle('task-card--done', done);
+    });
+  });
+  container.querySelectorAll('.task-btn-speaker').forEach(btn => {
     btn.addEventListener('click', (e) => e.stopPropagation());
   });
 }
@@ -218,7 +292,7 @@ function renderTasks() {
         ${row.tasks.map(taskCardHtml).join('')}
       </div>
     </section>`).join('');
-  bindTaskRowButtons(el);
+  bindTaskActions(el);
 }
 
 function renderPerfilDash() {
@@ -374,7 +448,7 @@ function renderSimAvatar(face) {
   const el = document.getElementById('sim-avatar-lg');
   if (!el) return;
   const state = { ...SIM_CHARACTER.avatar, face: face || SIM_CHARACTER.avatar.face };
-  el.innerHTML = buildAvatarSVG(state, 140);
+  el.innerHTML = buildAvatarSVG(state, 132);
 }
 
 function appendSimBubbles(container, lines) {
@@ -405,8 +479,6 @@ function resetSimChat() {
   if (input) input.value = '';
   setSimPlaceholder(SIM_CHARACTER.placeholders[0] || 'Escribe un mensaje…');
   document.getElementById('sim-input')?.classList.remove('has-text');
-  const sendBtn = document.getElementById('sim-send');
-  if (sendBtn) sendBtn.style.display = 'none';
 }
 
 function initChatSim() {
@@ -416,7 +488,6 @@ function initChatSim() {
   const syncSend = () => {
     const has = input.value.trim().length > 0;
     document.getElementById('sim-input')?.classList.toggle('has-text', has);
-    if (send) send.style.display = has ? 'flex' : 'none';
   };
   input?.addEventListener('input', syncSend);
   send?.addEventListener('click', () => sendSimMessage(input));
@@ -432,7 +503,6 @@ function sendSimMessage(input) {
   msgs.insertAdjacentHTML('beforeend', `<div class="bubble bubble-me">${text}</div>`);
   input.value = '';
   document.getElementById('sim-input')?.classList.remove('has-text');
-  document.getElementById('sim-send').style.display = 'none';
   msgs.scrollTop = msgs.scrollHeight;
 
   const reply = SIM_CHARACTER.replies[simUserTurn];
